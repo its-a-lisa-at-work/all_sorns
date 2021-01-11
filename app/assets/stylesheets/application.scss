@@ -202,12 +202,12 @@
    }
  }
 
- .usa-nav__link.pii-nav__link:hover::after {
-   background-color: color('blue-30v'); //need to fix
+ //  for js links
+ a {
+  text-decoration: underline;
  }
-
- .usa-current.pii-nav__link::after{
-   background-color: color('blue-30v');
+ a:hover {
+  cursor: pointer;
  }
 
  .sidebar {

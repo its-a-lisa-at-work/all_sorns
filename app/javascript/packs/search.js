@@ -4,106 +4,56 @@ $( function () {
     return html.replace("|","<span class='agency-separator'>|</span>");
   });
 
-  // Deselect all buttons
-  $("#fields-deselect-all").on('click', function(){
-    $("#sorn-fields input:checkbox").prop("checked", false)
-    $container = $("#active-section-filters")
-    clear_badges('fields', $container)
-  })
-  $("#agency-deselect-all").on('click', function(){
-    $("#agencies input:checkbox").prop("checked", false)
-    $container = $("#active-agency-filters")
-    clear_badges('agencies', $container)
-  })
-
-
-
   // Validate the publication date input
   $("#starting_year").on("change", publicationDateValidation)
   $("#ending_year").on("change", publicationDateValidation)
 
+  // Deselect all buttons
+  $("#sections-deselect-all, #agencies-deselect-all").on('click', function(e){
+    e.preventDefault();
+    parentId = e.target.parentElement.id // "sections" or "agencies"
+    // uncheck the checkboxes, fire the change event
+    $(`#sorn-${parentId} input:checkbox`).prop("checked", false).trigger("change")
+  })
+
   // Listener for checkboxes
-  $(".sidebar input:checkbox").on('change', function(){
+  $(".sidebar input:checkbox").on('change', function(e){
+    const parentId = $(this).parent().parent().parent()[0].id; // "sections" or "agencies"
     if(this.checked) {
-      const parent_id = $(this).parent().parent()[0].id;
-      if (parent_id === "sorn-fields") {
-        $section = $("#active-section-filters");
-        $container = $("#active-fields")
-      } else if(parent_id === "selected-agencies") {
-        $section = $("#active-agency-filters");
-        $container = $("#active-agencies")
-      }
-
-      add_badge(this.id, this.value, $section, $container)
-
-    }else{
-      // add '-badge' to id to remove
-      $(`#active-filters #${this.id}-badge`).remove()
-      if ( $("#active-section-filters .active-filter").length == 0 ){
-        $("#active-section-filters").hide();
-      }
-      if ( $("#active-agency-filters .active-filter").length == 0 ){
-        $("#active-agency-filters").hide();
-      }
+      addBadge(this.id, parentId);
+    } else {
+      removeBadge(this.id, parentId);
     }
   });
 
   // Listener for remove badge link
   $(document).on('click', 'a.remove-badge', function (e) {
     e.preventDefault()
-    remove_badge($(this).parent())
-
-    // strip '-badge' from id before calling
-    uncheck_filter($(this).parent().attr('id').replace('-badge',''))
-
-    if ( $("#active-section-filters .active-filter").length == 0 ){
-      $("#active-section-filters").hide();
-    }
-    if ( $("#active-agency-filters .active-filter").length == 0 ){
-      $("#active-agency-filters").hide();
-    }
+    id = e.target.parentElement.id;
+    removeBadge(id);
   });
 });
 
 // add filter badge and sort elements
-function add_badge(id, value, $section, $container){
-  // add '-badge' to ids for active filters
-  var $new_badge = `<div class="active-filter" id="${id}-badge">${value}<a href="#" class="remove-badge">[X]</a></div>`
+function addBadge(id, value, parentId){
+  $(id).toggle();
+  // $section = $(`#active-${parentId}-filters`);
+  // $container = $(`#active-${parentId}`);
 
-  $container.append($new_badge)
 
-  var $filters = $section.find('.active-filter').clone().get()
+  // show badges section if hidden
+  // if ( $section.is(":hidden") ){
+  //   $section.show();
+  // }
+};
 
-  var $sorted = $filters.sort(function(a, b) {
-    if (a.textContent < b.textContent) {
-      return -1;
-    } else {
-      return 1;
-    }
-  });
+function removeBadge(id, parentId){
+  $(`#active-filters #${id}`).remove();
 
-  $container.html($sorted)
-
-  if ( $section.is(":hidden") ){
-    $section.show();
+  // remove badge section if it's empty
+  if ( $(`#active-${parentId}-filters .active-filter`).length == 0 ){
+    $(`#active-${parentId}-filters`).hide();
   }
-};
-
-// remove filter badge
-function remove_badge(div){
-  div.remove()
-};
-
-function clear_badges(section, container){
-  $(`#active-${section}`).empty()
-  $container.hide()
-  
-};
-
-// uncheck filter
-function uncheck_filter(id){
-  var n = $(`input:checkbox[id^="${id}"]:checked`)
-  n.prop("checked", false)
 }
 
 function publicationDateValidation(){

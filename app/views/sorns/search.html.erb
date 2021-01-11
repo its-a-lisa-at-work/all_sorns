@@ -45,17 +45,23 @@
 
       <main class="usa-layout-docs__main usa-prose usa-layout-docs grid-col-8" id="main-content">
       <div id="active-filters">
-        <div id="active-section-filters" hidden>
+        <div id="active-sections-filters" style="display:none;">
           <div class="grid-row">
             <div class="labels">
               ACTIVE SECTION FILTERS
             </div>
           </div>
           <div class="grid-row">
-            <div id="active-fields"></div>
+            <div id="active-sections">
+              <% Sorn::FIELDS.each do |section| %>
+                <div class="active-filter" id="<%= section.to_s %>-badge" style="display:none;">
+                  <%= section.to_s.humanize %><a class="remove-badge">[X]</a>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
-        <div id="active-agency-filters" hidden>
+        <div id="active-agencies-filters" style="display:none;">
           <div class="grid-row">
             <div class="labels">
               ACTIVE AGENCY FILTERS
