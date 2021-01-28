@@ -9,8 +9,7 @@ FactoryBot.define do
     publication_date { "2000-01-13"}
     html_url { "HTML URL" }
     xml_url { "xml_url" }
-    xml { nil }
-    data_source { 'fedreg' }
+    xml { 'Parent Agency | Child Agency FAKE ACTION FAKE SUMMARY FAKE SYSTEM NAME 2000-01-13 HTML URL xml_url' }
 
     agencies do
       [
