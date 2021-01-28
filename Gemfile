@@ -5,7 +5,7 @@ ruby '~> 2.7.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.4'
-gem 'good_job', '>= 1.3.6'
+gem 'good_job', '>= 1.7.1'
 gem 'pg'
 gem 'httparty'
 gem 'federal_register', '~> 0.7.6'
