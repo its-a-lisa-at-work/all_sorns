@@ -63,6 +63,7 @@ class Sorn < ApplicationRecord
   ]
 
   include PgSearch::Model
+  pg_search_scope :xml_search, against: :xml, using: { tsearch: { dictionary: 'english', tsvector_column: :xml_tsvector } }
   pg_search_scope :dynamic_search, lambda { |fields, query|
     {
       against: fields.map(&:to_sym),

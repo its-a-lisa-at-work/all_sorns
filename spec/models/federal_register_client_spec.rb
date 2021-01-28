@@ -45,7 +45,6 @@ RSpec.describe FederalRegisterClient, type: :model do
     allow(FederalRegister::Document).to receive(:find).and_return mock_result
     allow(FederalRegister::Agency).to receive(:find).with(1).and_return parent_agency_result
     allow(FederalRegister::Agency).to receive(:find).with(2).and_return child_agency_result
-    allow(FullSornSearch).to receive(:refresh)
 
     allow(UpdateSornJob).to receive(:perform_later)
   end
@@ -183,12 +182,6 @@ RSpec.describe FederalRegisterClient, type: :model do
         client.find_sorns
 
         expect(UpdateSornJob).to have_received(:perform_later).twice
-      end
-
-      it "refreshes the search after the find_sorns job" do
-        client.find_sorns
-
-        expect(FullSornSearch).to have_received(:refresh).once
       end
     end
 

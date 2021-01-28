@@ -11,36 +11,20 @@ of exact terms or phrases was useful to our users.
 
 We use postgres' built-in [full text
 search](https://www.postgresql.org/docs/current/textsearch.html)
-ability. We combined two approaches to implementing it in SORN DASH.
+ability.
 
-By default, searches are made against all of our SORN data at once. We
-use a [materialized
-view](https://www.postgresql.org/docs/13/rules-materializedviews.html)
-to combine all of this data into one single column that is optimized for
-full text search. This view needs to be refreshed whenever the data
-changes, which is once a day in our case.
+By default, searches are made against all of our SORN data at once. We do
+a single search against the `xml` column which has the entirety of the
+published SORN. If a user applies filters to narrow their search to a
+subset of columns or agencies, then we search against only those columns.
 
-If a user applies filters to narrow their search to a subset of columns
-or agencies, then we use a different approach. We've created [generated
-columns](https://www.postgresql.org/docs/13/ddl-generated-columns.html)
-for each of our existing data columns that are optimized for full text
-search. We then search against the subset of columns selected by the
-user. These columns are always up to date. Custom search is not as fast
-as searches using materialized views, but is still much faster than
-searching these columns directly. Generated columns are a new type, just
-introduced in PostgreSQL 12.
+All of the columns we use for full text search are generated columns
+containing the tsvector data type that powers search. Generated columns are
+a new type, just introduced in PostgreSQL 12.
 
-The materialized view is created and versioned by the great [Scenic
-gem](https://github.com/scenic-views/scenic). The view is searched
-against by the **FullSornSearch** model.
-
-Both approaches for full text search use the incredible [**pg\_search
+Full text search use the [**pg\_search
 gem**](https://github.com/Casecommons/pg_search).
 
-These two articles explaining these approaches were very helpful:
-
-  - > [Optimizing full-text search with Postgres materialized view in
-    > Rails](https://caspg.com/blog/optimizing-full-text-search-with-postgres-materialized-view-in-rails)
-
+This article was helpful in our development.
   - > [Full Text Search in Milliseconds with Rails and
     > PostgreSQL](https://pganalyze.com/blog/full-text-search-ruby-rails-postgres)

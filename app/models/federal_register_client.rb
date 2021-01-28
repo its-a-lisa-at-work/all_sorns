@@ -36,8 +36,6 @@ class FederalRegisterClient
     @search_options[:page] += 1
     if @search_options[:page] <= result_set.total_pages
       find_sorns
-    else
-      FullSornSearch.refresh # refresh the materialilzed view to include the new SORNs found
     end
   end
 

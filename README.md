@@ -46,7 +46,7 @@ SORN DASH has a simple technical stack - you need a computer with:
 Make sure that **postgresql** is installed and running:
 
 > **\>** brew install postgresql
-> 
+>
 > **\>** brew services start postgresql
 
 Use a ruby version manager to set the local SORN DASH directory to the
@@ -57,13 +57,13 @@ you have Ruby’s
 installed and install the necessary project dependencies.
 
 > **\>** gem install bundler
-> 
+>
 > **\>** gem install yarn
 
 Install the necessary project dependencies using:
 
 > **\>** bundle install
-> 
+>
 > **\>** yarn install --check-files
 
 ### 2\. Create and populate local database
@@ -72,7 +72,7 @@ Now that you have the environment set-up, create the database and
 webserver using:
 
 > **\>** bundle exec rails db:setup
-> 
+>
 > **\>** bundle exec rails server
 
 Once this is complete, run the following command to fetch all the SORNs
@@ -86,8 +86,6 @@ After the database has been populated, run these commands to update the
 links between SORNs that is displayed in the search results:
 
 **\>** bundle exec rails all\_sorns:update\_all\_mentioned\_sorns
-
-**\>** Bundle exec rails all\_sorns:refresh\_search
 
 You can now run SORN DASH locally using:
 
